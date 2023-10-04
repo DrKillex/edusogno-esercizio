@@ -20,6 +20,21 @@
             $email = $_POST['email'];
             $password = $_POST['password'];
             $cryptoPassword = md5($password);
+            $admin = false;
+
+            $sqladmin = "SELECT `email` FROM `admins`";
+
+            $resultAdmin = $conn->query($sqladmin);
+
+            while($row = $resultAdmin->fetch_assoc()){
+                $currentEmail=$row['email'];
+                echo $currentEmail;
+                echo '<br>';
+                if ($currentEmail === $email){
+                    $admin = true;
+                    break;
+                }              
+            };
 
             $sql = "SELECT * FROM `utenti` 
                     WHERE `email` = '$email'
@@ -27,6 +42,10 @@
 
             $sqlEvents = "SELECT * FROM `eventi` 
                         WHERE `attendees` LIKE '%$email%'";
+
+            if($admin === true){
+                $sqlEvents = "SELECT * FROM `eventi`";
+            }
 
             $result = $conn->query($sql);
             $resultEvents = $conn->query($sqlEvents);
