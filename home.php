@@ -61,15 +61,31 @@
         ?>
                     <div class="cards_wrapper">
                         <h2 class="title">
-                            Ciao <span class="capitalize"><?= $name . ' ' . $surname; ?></span> ecco i tuoi eventi
+                            Ciao <span class="capitalize"><?= ($admin? 'ADMIN ':''). $name . ' ' . $surname; ?></span> ecco i tuoi eventi
                         </h2>
                         <div class="cards_grid">
+                            <?php
+                                if ($admin === true) {
+                            ?>
+                                <div class="card">
+                                    <h3 class="card_title">
+                                        Nuovo evento
+                                    </h3>
+                                    <button class="btn_submit" title="Unisciti all'evento">
+                                        <a href="http://localhost/edusogno-esercizio/registration-event-page.php">Crea nuovo evento</a>
+                                    </button>
+                                </div>
+                            <?php
+                                }
+                            ?>
                             <?php
                             if ($resultEvents->num_rows > 0) {
                                 // output data of each row
                                 while ($rowEvents = $resultEvents->fetch_assoc()) {
                                     $eventName = $rowEvents['nome_evento'];
                                     $eventDate = $rowEvents['data_evento'];
+                                    $editEventUrl = 'http://localhost/edusogno-esercizio/edit-event-page.php?id='.$rowEvents['id'];
+                                    $deleteEventUrl = 'http://localhost/edusogno-esercizio/delete-and-redirect.php?id='.$rowEvents['id']
                             ?>
                                     <div class="card">
                                         <h3 class="card_title">
@@ -79,8 +95,20 @@
                                             <?= $eventDate; ?>
                                         </span>
                                         <button class="btn_submit" title="Unisciti all'evento">
-                                            Join
+                                            <a href="">join</a>
                                         </button>
+                                        <?php
+                                            if ($admin === true) {
+                                        ?>
+                                            <button class="btn_submit" title="Unisciti all'evento">
+                                                <a href="<?php echo $editEventUrl; ?>">edit</a>
+                                            </button>
+                                            <button class="btn_submit" title="Unisciti all'evento">
+                                                <a href="<?php echo $deleteEventUrl; ?>">delete</a>
+                                            </button>
+                                        <?php
+                                            }
+                                        ?>
                                     </div>
                                 <?php
                                 }
